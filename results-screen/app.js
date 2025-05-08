@@ -1,5 +1,6 @@
-import renderScreen1 from "./screens/screen1.js";
-import renderScreen2 from "./screens/screen2.js";
+// results-screen/app.js
+import renderScoreScreen from "./screens/scoreScreen.js";
+import renderWinnerScreen from "./screens/winnerScreen.js";
 
 const socket = io("/", { path: "/real-time" });
 
@@ -14,11 +15,11 @@ function renderRoute(currentRoute) {
   switch (currentRoute?.path) {
     case "/":
       clearScripts();
-      renderScreen1(currentRoute?.data);
+      renderScoreScreen(currentRoute?.data);
       break;
-    case "/screen2":
+    case "/winner":
       clearScripts();
-      renderScreen2(currentRoute?.data);
+      renderWinnerScreen(currentRoute?.data);
       break;
     default:
       const app = document.getElementById("app");

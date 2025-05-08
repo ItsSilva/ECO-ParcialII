@@ -8,6 +8,18 @@ const {
 const joinGame = async (req, res) => {
   try {
     const { nickname, socketId } = req.body;
+
+    // Check if nickname is already taken
+    const existingPlayer = playersDb
+      .getAllPlayers()
+      .find((p) => p.nickname === nickname);
+    if (existingPlayer) {
+      return res.status(400).json({
+        success: false,
+        error: "Nickname already in use",
+      });
+    }
+
     playersDb.addPlayer(nickname, socketId);
 
     const gameData = playersDb.getGameData();
@@ -18,12 +30,23 @@ const joinGame = async (req, res) => {
 
     res.status(200).json({ success: true, players: gameData.players });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error joining game:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 };
 
 const startGame = async (req, res) => {
   try {
+    const playersCount = playersDb.getAllPlayers().length;
+
+    // Check if we have enough players (minimum 3: 1 Marco and at least 2 Polos)
+    if (playersCount < 3) {
+      return res.status(400).json({
+        success: false,
+        error: "Need at least 3 players to start the game",
+      });
+    }
+
     const playersWithRoles = playersDb.assignPlayerRoles();
 
     playersWithRoles.forEach((player) => {
@@ -32,13 +55,23 @@ const startGame = async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error starting game:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 };
 
 const notifyMarco = async (req, res) => {
   try {
     const { socketId } = req.body;
+
+    // Verify player is actually Marco
+    const player = playersDb.findPlayerById(socketId);
+    if (!player || player.role !== "marco") {
+      return res.status(403).json({
+        success: false,
+        error: "Only Marco can use this action",
+      });
+    }
 
     const rolesToNotify = playersDb.findPlayersByRole([
       "polo",
@@ -54,13 +87,26 @@ const notifyMarco = async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error notifying Marco:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 };
 
 const notifyPolo = async (req, res) => {
   try {
     const { socketId } = req.body;
+
+    // Verify player is actually a Polo
+    const player = playersDb.findPlayerById(socketId);
+    if (
+      !player ||
+      (player.role !== "polo" && player.role !== "polo-especial")
+    ) {
+      return res.status(403).json({
+        success: false,
+        error: "Only Polos can use this action",
+      });
+    }
 
     const rolesToNotify = playersDb.findPlayersByRole("marco");
 
@@ -73,7 +119,8 @@ const notifyPolo = async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error notifying Polo:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 };
 
@@ -81,8 +128,23 @@ const selectPolo = async (req, res) => {
   try {
     const { socketId, poloId } = req.body;
 
+    // Verify player is actually Marco
     const myUser = playersDb.findPlayerById(socketId);
+    if (!myUser || myUser.role !== "marco") {
+      return res.status(403).json({
+        success: false,
+        error: "Only Marco can select a Polo",
+      });
+    }
+
     const poloSelected = playersDb.findPlayerById(poloId);
+    if (!poloSelected) {
+      return res.status(404).json({
+        success: false,
+        error: "Selected player not found",
+      });
+    }
+
     const allPlayers = playersDb.getAllPlayers();
     const isSpecialPolo = poloSelected.role === "polo-especial";
 
@@ -132,7 +194,8 @@ const selectPolo = async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error selecting Polo:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 };
 
@@ -149,7 +212,8 @@ const resetScores = async (req, res) => {
 
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error resetting scores:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 };
 

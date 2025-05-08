@@ -28,6 +28,19 @@ const addPlayer = (nickname, socketId) => {
 };
 
 /**
+ * Remove a player by their socket ID
+ * @param {string} socketId - Player's socket ID
+ * @returns {Object|null} Removed player object or null if not found
+ */
+const removePlayer = (socketId) => {
+  const index = players.findIndex((player) => player.id === socketId);
+  if (index !== -1) {
+    return players.splice(index, 1)[0];
+  }
+  return null;
+};
+
+/**
  * Find a player by their socket ID
  * @param {string} socketId - Player's socket ID
  * @returns {Object|null} Player object or null if not found
@@ -119,6 +132,7 @@ const getGameData = () => {
 const resetPlayerScores = () => {
   players.forEach((player) => {
     player.score = 0;
+    delete player.role;
   });
 };
 
@@ -133,6 +147,7 @@ const resetGame = () => {
 module.exports = {
   getAllPlayers,
   addPlayer,
+  removePlayer,
   findPlayerById,
   assignPlayerRoles,
   findPlayersByRole,

@@ -7,21 +7,21 @@ export default function renderWinnerScreen(data) {
 
   app.innerHTML = `
     <div id="winner-screen">
-      <h1>We Have a Winner!</h1>
+      <h1>¡Tenemos un ganador!</h1>
       <div class="winner-announcement">
-        <h2>${winner.nickname} wins with ${winner.score} points!</h2>
+        <h2>¡${winner.nickname} gana con ${winner.score} puntos!</h2>
       </div>
       
       <div class="sorting-controls">
-        <button id="sort-by-score" class="active">Sort by Score</button>
-        <button id="sort-alphabetically">Sort Alphabetically</button>
+        <button id="sort-by-score" class="active">Ordenar por puntuación</button>
+        <button id="sort-alphabetically">Ordenar alfabéticamente</button>
       </div>
       
       <div id="final-rankings">
         <!-- Player rankings will be inserted here -->
       </div>
       
-      <button id="reset-game" class="reset-button">Reset All Scores & Restart Game</button>
+      <button id="reset-game" class="reset-button">Restablecer todas las puntuaciones y reiniciar el juego</button>
     </div>
   `;
 

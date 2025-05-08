@@ -5,14 +5,14 @@ export default function renderScoreScreen(data) {
   const app = document.getElementById("app");
   app.innerHTML = `
     <div id="score-screen">
-      <h1>Marco-Polo Live Scores</h1>
+      <h1>Resultados en vivo de Marco Polo</h1>
       <div id="players-list">
         <div class="player-header">
-          <span class="player-name">Player</span>
-          <span class="player-score">Score</span>
+          <span class="player-name">Jugador/a</span>
+          <span class="player-score">Puntaje</span>
         </div>
         <div id="players-container">
-          <p class="loading">Waiting for players to connect...</p>
+          <p class="loading">Esperando que las jugadoras se conecten ...</p>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@ export default function renderScoreScreen(data) {
   function updatePlayersList(players) {
     if (!players || players.length === 0) {
       playersContainer.innerHTML =
-        '<p class="loading">Waiting for players to connect...</p>';
+        '<p class="loading">Esperando que las jugadoras se conecten ...</p>';
       return;
     }
 

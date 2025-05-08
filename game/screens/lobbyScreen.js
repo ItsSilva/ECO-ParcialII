@@ -9,7 +9,7 @@ export default function renderLobbyScreen(data) {
         Esperando a que otros se unan:
         <b id="users-count"><b>0</b></b> usuarios en la sala
       </p>
-      <button id="start-button">Start game</button>
+      <button id="start-button">Iniciar juego</button>
     </div>
   `;
 

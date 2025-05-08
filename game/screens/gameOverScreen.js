@@ -4,9 +4,9 @@ export default function renderGameOverScreen(data) {
   const app = document.getElementById("app");
   app.innerHTML = `
     <div id="game-over">
-      <h1>Game Over</h1>
+      <h1>Juego terminado</h1>
       <h2 id="game-result">${data.message}</h2>
-      <button id="restart-button">Restart game</button>
+      <button id="restart-button">Reiniciar juego</button>
     </div>
   `;
 

@@ -8,7 +8,7 @@ export default function renderHomeScreen() {
       <p>Ingresa tu nombre de usuario para unirte al juego</p>
       <div id="form">
         <input type="text" id="nickname" placeholder="nickname" />
-        <button id="join-button">Join Game</button>
+        <button id="join-button">Unirse al juego</button>
       </div>
     </div>
   `;
@@ -19,7 +19,7 @@ export default function renderHomeScreen() {
   joinButton.addEventListener("click", async () => {
     const userName = nicknameInput.value;
     if (!userName.trim()) {
-      alert("Please enter a nickname");
+      alert("Por favor ingresa un apodo");
       return;
     }
 
@@ -32,7 +32,7 @@ export default function renderHomeScreen() {
     if (result.success !== false) {
       navigateTo("/lobby", { nickname: userName, players: result.players });
     } else {
-      alert("Failed to join game. Please try again.");
+      alert("No se pudo unir al juego. Inténtalo de nuevo.");
     }
   });
 }
